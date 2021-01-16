@@ -1,7 +1,7 @@
 package execute
 
 import (
-	"../output"
+	"qshell/output"
 )
 
 type ICheck interface {

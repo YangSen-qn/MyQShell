@@ -1,9 +1,11 @@
 package user
 
 import (
-	"../../common"
-	"../../execute"
 	"github.com/spf13/cobra"
+	"qshell/cmd/root"
+
+	"qshell/common"
+	"qshell/execute"
 )
 
 var (
@@ -48,10 +50,7 @@ var userChangeCmd = &cobra.Command{
 	Run:   runFunction,
 }
 
-func AddCommand(superCommand *cobra.Command) {
-
-	common.ConfigParam(userCmd, paramConfig)
-
+func init() {
 	userCmd.Flags().StringVarP(&paramUserName, "name", "", "", "")
 	userCmd.Flags().StringVarP(&paramAK, "ak", "", "", "")
 	userCmd.Flags().StringVarP(&paramSK, "sk", "", "", "")
@@ -60,7 +59,7 @@ func AddCommand(superCommand *cobra.Command) {
 	userCmd.Flags().BoolVarP(&paramIsRemoveUser, "remove", "", false, "")
 	userCmd.Flags().BoolVarP(&paramIsSetCurrentUser, "change", "", false, "")
 	userCmd.Flags().BoolVarP(&paramIsGetCurrentUser, "current", "", false, "")
-	superCommand.AddCommand(userCmd)
+	root.RootCmd.AddCommand(userCmd)
 }
 
 func runFunction(cmd *cobra.Command, params []string) {

@@ -1,9 +1,9 @@
 package user
 
 import (
-	"../../execute"
-	"../../iqshell/user"
-	"../../output"
+	"qshell/execute"
+	"qshell/iqshell/user"
+	"qshell/output"
 )
 
 // ------------- List ---------------

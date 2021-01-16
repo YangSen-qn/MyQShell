@@ -1,7 +1,7 @@
 package output
 
 import (
-	"../common"
+	"qshell/common"
 )
 
 type OutputType int8

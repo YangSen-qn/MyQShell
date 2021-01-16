@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"./cmd/root"
+	"qshell/cmd/root"
 )
 
 func main() {

@@ -1,7 +1,7 @@
 package user
 
 import (
-	"../../common"
+	"qshell/common"
 )
 
 var (

@@ -9,23 +9,23 @@ const (
 )
 
 type QShellError struct {
-	code int `json:"code"`
+	code        int    `json:"code"`
 	description string `json:"description"`
 }
 
-func NewQShellError(code int, description string) *QShellError	  {
+func NewQShellError(code int, description string) *QShellError {
 	return &QShellError{
 		code:        code,
 		description: description,
 	}
 }
 
-func (err *QShellError)MarshalJSON() ([]byte, error) {
+func (err *QShellError) MarshalJSON() ([]byte, error) {
 	return json.Marshal(err)
 }
 
-func (e *QShellError) Error() string {
-	return e.description
+func (err *QShellError) Error() string {
+	return err.description
 }
 
 type IError interface {

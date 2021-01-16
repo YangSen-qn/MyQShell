@@ -1,43 +1,51 @@
 package execute
 
 import (
-	"../common"
-	"../output"
+	"context"
+	"qshell/common"
+	"time"
 )
 
-type IContext interface {
-	output.IOutput
-
-	SetOutput(output output.IOutput)
-	GetOutput() output.IOutput
+type IQShellContext interface {
+	context.Context
 
 	SetConfig(config *common.Config)
 	GetConfig() *common.Config
 }
 
-type Context struct {
-	output output.IOutput
+type QShellContext struct {
+	context context.Context
+
 	config *common.Config
 }
 
-func (c *Context) SetOutput(output output.IOutput) {
-	c.output = output
-}
-
-func (c *Context) GetOutput() output.IOutput {
-	return c.output
-}
-
-func (c *Context) Output(outputType output.OutputType, data output.IOutputData, err error) {
-	if c.output != nil {
-		c.output.Output(outputType, data, err)
+func NewQShellContext(context context.Context) *QShellContext {
+	return &QShellContext{
+		context: context,
 	}
 }
 
-func (c *Context) SetConfig(config *common.Config) {
+func (c *QShellContext) SetConfig(config *common.Config) {
 	c.config = config
 }
 
-func (c *Context) GetConfig() *common.Config {
+func (c *QShellContext) GetConfig() *common.Config {
 	return c.config
+}
+
+
+func (c *QShellContext) Deadline() (deadline time.Time, ok bool) {
+	return c.context.Deadline()
+}
+
+func (c *QShellContext) Done() <-chan struct{} {
+	return c.context.Done()
+}
+
+func (c *QShellContext) Err() error {
+	return c.context.Err()
+}
+
+func (c *QShellContext) Value(key interface{}) interface{} {
+	return c.context.Value(key)
 }

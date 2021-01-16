@@ -1,9 +1,9 @@
 package version
 
 import (
-	"../../common"
-	"../../execute"
-	"../../output"
+	"qshell/common"
+	"qshell/execute"
+	"qshell/output"
 )
 
 type versionCMD struct {
