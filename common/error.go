@@ -8,6 +8,13 @@ const (
 	ErrorCodeCMDRegisterInvalidParams = -10000
 )
 
+type IQShellError interface {
+	error
+	json.Marshaler
+
+	ErrorCode() int
+}
+
 type QShellError struct {
 	code        int    `json:"code"`
 	description string `json:"description"`
@@ -28,9 +35,6 @@ func (err *QShellError) Error() string {
 	return err.description
 }
 
-type IError interface {
-	error
-	json.Marshaler
-
-	ErrorCode() int
+func (err *QShellError) ErrorCode() int {
+	return err.code
 }

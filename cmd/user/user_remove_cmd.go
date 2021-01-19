@@ -8,11 +8,11 @@ import (
 	"qshell/output"
 )
 
-type userCMD struct {
+type userRemoveCMD struct {
 	*param.ParamCMD
 }
 
-func (cmd *userCMD) Execute(context *common.QShellContext) common.IQShellError {
+func (cmd *userRemoveCMD) Execute(context *common.QShellContext) common.IQShellError {
 	userList := user.CredentialList()
 
 	u := &user.Credential{
@@ -29,9 +29,8 @@ func (cmd *userCMD) Execute(context *common.QShellContext) common.IQShellError {
 	return nil
 }
 
-
-func configUserCMD(root param.IParamCMD) param.IParamCMD  {
-	cmd := &userCMD{
+func configUserRemoveCMD(root param.IParamCMD) {
+	cmd := &userRemoveCMD{
 		ParamCMD: param.NewParamCMD(),
 	}
 
@@ -40,19 +39,10 @@ func configUserCMD(root param.IParamCMD) param.IParamCMD  {
 	})
 
 	cmd.ConfigParamCMDParseConfig(param.ParamCMDConfig{
-		Use:                    "user",
-		Short:                  "manager user",
-		Long:                   "",
+		Use:   "remove",
+		Short: "manager user",
+		Long:  "",
 	})
 
 	root.AddCMD(cmd)
-	return cmd
-}
-
-func ConfigCMD(root param.IParamCMD) {
-	userCMD := configUserCMD(root)
-	configUserListCMD(userCMD)
-	configUserAddCMD(userCMD)
-	configUserRemoveCMD(userCMD)
-	configUserChangeCMD(userCMD)
 }

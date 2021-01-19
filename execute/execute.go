@@ -1,46 +1,41 @@
 package execute
 
 import (
+	"qshell/common"
 	"qshell/output"
 )
 
-type ICheck interface {
-	Check() error
-}
-
-type IPrepare interface {
-	Prepare() error
-}
-
 type IExecute interface {
-	Execute() error
+	GetOutput() output.IOutput
+	SetOutput(output output.IOutput)
+
+	Check(context *common.QShellContext) common.IQShellError
+	Prepare(context *common.QShellContext) common.IQShellError
+	Execute(context *common.QShellContext) common.IQShellError
 }
 
-func Execute(cmd ICommand) {
-	if cmd == nil {
+func Execute(exe IExecute, context *common.QShellContext) {
+	if exe == nil {
 		return
 	}
 
-	config := cmd.GetConfig()
+	// 配置output
+	config := context.GetConfig()
+	exe.SetOutput(output.Output(config))
+	// 全局配置拉取，比如uc query
 
-	cmd.SetOutput(output.Output(config))
-
-	check, isOk := cmd.(ICheck)
-	if isOk {
-		if err := check.Check(); err != nil {
-			return
-		}
+	// 检测参数等信息，根据context和用户输入参数，自动匹配command的执行环境，如果不满足执行条件，则返回错误
+	if exe.Check(context) != nil {
+		return
 	}
 
-	prepare, isOk := cmd.(IPrepare)
-	if isOk {
-		if err := prepare.Prepare(); err != nil {
-			return
-		}
+	// 准备
+	if exe.Prepare(context) != nil {
+		return
 	}
 
-	execute, isOk := cmd.(IExecute)
-	if isOk {
-		_ = execute.Execute()
+	// 执行
+	if exe.Execute(context) != nil {
+		return
 	}
 }

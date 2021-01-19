@@ -1,32 +1,24 @@
 package user
 
+import "qshell/common"
+
 // 全局有效
-func userListFromDB() [] *User {
+func credentialListFromDB() [] *Credential {
 
 	return nil
 }
 
-func currentUserFromDB() *User {
+func getCredentialFromDB(name string) *Credential {
 
 	return nil
 }
 
-func setCurrentUserToDB(userName string) error {
+func removeCredentialFromDB(name string) common.IQShellError {
 
 	return nil
 }
 
-func getUserFromDB(userName string) *User {
-
-	return nil
-}
-
-func removeUserToDB(userName string) error {
-
-	return nil
-}
-
-func addUserToDB(user *User) error {
+func addCredentialToDB(credential *Credential) common.IQShellError {
 
 	return nil
 }

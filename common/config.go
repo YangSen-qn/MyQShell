@@ -10,4 +10,3 @@ var (
 type Config struct {
 	OutputFormatValue string
 }
-

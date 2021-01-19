@@ -1,34 +1,47 @@
 package root
 
 import (
-	"github.com/spf13/cobra"
-	"qshell/common"
-	"qshell/execute"
+	"qshell/cmd/param"
+	"qshell/cmd/user"
+	"qshell/cmd/version"
 
-	_ "qshell/cmd/user"
-	_ "qshell/cmd/version"
+	"qshell/common"
 )
 
 var (
 	config = &common.Config{}
 )
 
-var RootCmd = &cobra.Command{
-	Use:     "qshell",
-	Short:   "Qiniu commandline tool for managing your bucket and CDN",
-	Version: common.GetVersion(),
-	Run:     runFunction,
+type RootCMD struct {
+	*param.ParamCMD
+
+	config *common.Config
 }
+
+var rootCmd *RootCMD
 
 func init() {
+	rootCmd = &RootCMD{
+		ParamCMD: param.NewParamCMD(),
+		config: &common.Config{},
+	}
 
-	RootCmd.Flags().StringVarP(&config.OutputFormatValue, "outputFormat", "", "", "")
+	rootCmd.ConfigParamCMDParseConfig(param.ParamCMDConfig{
+		Use:                    "qshell",
+		Short:                  "",
+		Long:                   "",
+		Version:                common.GetVersion(),
+		BashCompletionFunction: "",
+	})
+
+	configSubCMD()
 }
 
-func runFunction(cmd *cobra.Command, args []string) {
+func configSubCMD() {
+	version.ConfigCMD(rootCmd)
+	user.ConfigCMD(rootCmd)
+}
 
-	context := execute.NewQShellContext(cmd.Context())
-	context.SetConfig(config)
-	cmd.Context()
-	RootCmd.Flags().StringVarP(&config.OutputFormatValue, "outputFormat", "", "", "")
+func Execute() error {
+	return rootCmd.CobraExecute()
 }

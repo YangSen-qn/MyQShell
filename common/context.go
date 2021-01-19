@@ -1,22 +1,14 @@
-package execute
+package common
 
 import (
 	"context"
-	"qshell/common"
 	"time"
 )
-
-type IQShellContext interface {
-	context.Context
-
-	SetConfig(config *common.Config)
-	GetConfig() *common.Config
-}
 
 type QShellContext struct {
 	context context.Context
 
-	config *common.Config
+	config *Config
 }
 
 func NewQShellContext(context context.Context) *QShellContext {
@@ -25,14 +17,13 @@ func NewQShellContext(context context.Context) *QShellContext {
 	}
 }
 
-func (c *QShellContext) SetConfig(config *common.Config) {
+func (c *QShellContext) SetConfig(config *Config) {
 	c.config = config
 }
 
-func (c *QShellContext) GetConfig() *common.Config {
+func (c *QShellContext) GetConfig() *Config {
 	return c.config
 }
-
 
 func (c *QShellContext) Deadline() (deadline time.Time, ok bool) {
 	return c.context.Deadline()
