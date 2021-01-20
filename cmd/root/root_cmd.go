@@ -15,8 +15,6 @@ var (
 
 type RootCMD struct {
 	*param.ParamCMD
-
-	config *common.Config
 }
 
 var rootCmd *RootCMD
@@ -24,7 +22,6 @@ var rootCmd *RootCMD
 func init() {
 	rootCmd = &RootCMD{
 		ParamCMD: param.NewParamCMD(),
-		config: &common.Config{},
 	}
 
 	rootCmd.ConfigParamCMDParseConfig(param.ParamCMDConfig{

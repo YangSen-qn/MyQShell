@@ -1,11 +1,10 @@
 package cache
 
 import (
+	"fmt"
 	"github.com/spf13/viper"
-	"os"
 	"path/filepath"
 	"qshell/qn_shell_error"
-	"strings"
 )
 
 type Cache struct {
@@ -24,19 +23,12 @@ func (cache *Cache) GetCachePath() string {
 	return cache.configJsonFile
 }
 
-func (cache *Cache) SetCacheFile(file string) qn_shell_error.IQShellError {
+func (cache *Cache) SetCacheFile(file string) (err qn_shell_error.IQShellError) {
 	if file == "" {
-		return qn_shell_error.NewInvalidFilePathError("cache file is empty")
+		err = qn_shell_error.NewInvalidFilePathError("cache file is empty")
+		return
 	} else {
-		if !strings.HasSuffix(file, ".json") {
-			cache.configJsonFile = file + ".json"
-			err := os.Rename(file, cache.configJsonFile)
-			if err != nil {
-				return qn_shell_error.NewHeavyError(qn_shell_error.QShellErrorCodeFilePathError, "config file error")
-			}
-		} else {
-			cache.configJsonFile = file
-		}
+		cache.configJsonFile = file
 		cache.cache.SetConfigFile(cache.configJsonFile)
 	}
 
@@ -67,7 +59,9 @@ func (cache *Cache) ReadInConfig() qn_shell_error.IQShellError {
 // api
 func (cache *Cache) CacheSetString(value string, keyList []string) {
 	for _, key := range keyList {
+		fmt.Println("write config key:", key, " value:", value)
 		cache.cache.Set(key, value)
+		cache.cache.WriteConfig()
 	}
 }
 

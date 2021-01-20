@@ -5,16 +5,20 @@ import (
 	"qshell/cmd/execute"
 	"qshell/cmd/output"
 	"qshell/cmd/param"
-	error2 "qshell/qn_shell_error"
 	"qshell/iqshell/config"
+	"qshell/qn_shell_error"
 )
 
 type configPathCMD struct {
 	*param.ParamCMD
 }
 
-func (cmd *configPathCMD) Execute(context *common.QShellContext) error2.IQShellError {
-	output.OutputResult(cmd, output.NewStringOutputData(config.GetConfigPath()))
+func (cmd *configPathCMD) Execute(context *common.QShellContext) qn_shell_error.IQShellError {
+	path, err := config.GetConfigPath()
+	if err != nil {
+		return nil
+	}
+	output.OutputResult(cmd, output.NewStringOutputData(path))
 	return nil
 }
 

@@ -3,17 +3,27 @@ package user
 import (
 	"encoding/json"
 	"github.com/syndtr/goleveldb/leveldb/opt"
-	"qshell/iqshell/config"
 	"qshell/iqshell/utils"
 	"qshell/qn_shell_error"
 
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
+var (
+	dbPath string
+)
+
+func SetDBPath(path string) {
+	dbPath = path
+}
+
+func isDBPathValid(path string) bool {
+	return path != ""
+}
+
 // 全局有效
 func credentialListFromDB() [] *Credential {
-	dbPath, err := config.GetCredentialDBPath()
-	if err != nil {
+	if !isDBPathValid(dbPath) {
 		return nil
 	}
 
@@ -28,8 +38,14 @@ func credentialListFromDB() [] *Credential {
 	for iter.Next() {
 		credential, dbErr := credentialFromDBValue(iter.Value())
 		if dbErr != nil {
-			return nil
+			continue
 		}
+
+		credential, err := decrypt(credential)
+		if err != nil {
+			continue
+		}
+
 		if credential.isValid() {
 			credentialList = append(credentialList, credential)
 		}
@@ -40,8 +56,7 @@ func credentialListFromDB() [] *Credential {
 }
 
 func getCredentialFromDB(name string) *Credential {
-	dbPath, err := config.GetCredentialDBPath()
-	if err != nil {
+	if !isDBPathValid(dbPath) {
 		return nil
 	}
 
@@ -61,13 +76,17 @@ func getCredentialFromDB(name string) *Credential {
 		return nil
 	}
 
+	credential, err := decrypt(credential)
+	if err != nil {
+		return nil
+	}
+
 	return credential
 }
 
 func removeCredentialFromDB(name string) qn_shell_error.IQShellError {
-	dbPath, err := config.GetCredentialDBPath()
-	if err != nil {
-		return err
+	if !isDBPathValid(dbPath) {
+		return qn_shell_error.NewInvalidFilePathError("db path is invalid")
 	}
 
 	db, dbErr := leveldb.OpenFile(dbPath, nil)
@@ -88,9 +107,8 @@ func removeCredentialFromDB(name string) qn_shell_error.IQShellError {
 }
 
 func addCredentialToDB(credential *Credential, isCover bool) qn_shell_error.IQShellError {
-	dbPath, err := config.GetCredentialDBPath()
-	if err != nil {
-		return err
+	if !isDBPathValid(dbPath) {
+		return qn_shell_error.NewInvalidFilePathError("db path is invalid")
 	}
 
 	db, dbErr := leveldb.OpenFile(dbPath, nil)
@@ -114,7 +132,7 @@ func addCredentialToDB(credential *Credential, isCover bool) qn_shell_error.IQSh
 		Sync: true,
 	}
 
-	credential, err = encrypt(credential)
+	credential, err := encrypt(credential)
 	if err != nil {
 		return err
 	}

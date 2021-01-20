@@ -40,7 +40,7 @@ func NewParamCMD() *ParamCMD {
 		Command:   execute.NewCommand(),
 		supperCMD: nil,
 		cmd:       &cobra.Command{},
-		config:    &common.Config{},
+		config:    common.NewConfig(),
 	}
 	return cmd
 }

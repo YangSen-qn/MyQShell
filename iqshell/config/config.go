@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	defaultConfigFileName = ".qshell"
+	configFileName = "config.json"
 
 	// 根路径名
 	rootDirName = ".qshell"
@@ -23,14 +23,20 @@ var (
 	keyCredentialDBPath = []string{"path.accdb", "path.acc_db_path"}
 
 	// 根路径
-	rootPath = ""
+	config *LoadConfig = nil
 
 	// 配置缓存
 	configCache = cache.NewCache()
 )
 
-func init() {
-	SetConfigPath("")
+type LoadConfig struct {
+	// 根路径
+	RootDir string
+}
+
+
+func SetLoadConfig(loadConfig *LoadConfig)  {
+	config = loadConfig
 }
 
 func GetCredentialDBPath() (path string, err qn_shell_error.IQShellError) {
@@ -44,38 +50,26 @@ func GetCredentialDBPath() (path string, err qn_shell_error.IQShellError) {
 }
 
 // config path
-func GetConfigPath() string {
-	return configCache.GetCachePath()
-}
-
-func SetConfigPath(path string) qn_shell_error.IQShellError {
-	if path != "" {
-		return configCache.SetCacheFile(path)
-	}
-
-	homeDir, err := RootPath()
+func GetConfigPath() (path string, err qn_shell_error.IQShellError)  {
+	path, err = RootPath()
 	if err != nil {
-		return err
-	} else {
-		return configCache.SetCachePath(homeDir, defaultConfigFileName)
+		return
 	}
+
+	path = path + "/" + configFileName
+	return
 }
 
 // 获取ROOTPath
 func RootPath() (path string, err qn_shell_error.IQShellError) {
-	if rootPath == "" {
-		SetRootPath(defaultRootPath())
+	if config.RootDir == "" {
+		config.RootDir = defaultRootPath()
 	}
-	path = rootPath
-	if path == "" {
+	if config.RootDir == "" {
 		err = qn_shell_error.NewInvalidFilePathError("root dir not exist")
 	}
+	path = config.RootDir
 	return
-}
-
-// 设置RootPath
-func SetRootPath(path string) {
-	rootPath = path
 }
 
 func defaultRootPath() string {

@@ -86,7 +86,7 @@ func RemoveCredential(name string) qn_shell_error.IQShellError {
 		return err
 	}
 
-	if name == currentCredential.Name {
+	if currentCredential != nil && name == currentCredential.Name {
 		currentCredential = nil
 		cacheRemoveCurrentCredential()
 	}

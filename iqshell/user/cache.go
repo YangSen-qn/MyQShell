@@ -2,6 +2,8 @@ package user
 
 import (
 	"qshell/iqshell/cache"
+	"qshell/iqshell/utils"
+	"qshell/qn_shell_error"
 )
 
 var (
@@ -13,10 +15,11 @@ var (
 	currentCredentialCache = cache.NewCache()
 )
 
-func setCachePath(path string) {
-	if path != "" {
-		currentCredentialCache.SetCacheFile(path)
+func SetCachePath(path string) qn_shell_error.IQShellError {
+	if !utils.Exist(path) {
+		utils.CreateFile(path)
 	}
+	return currentCredentialCache.SetCacheFile(path)
 }
 
 func cacheRemoveCurrentCredential() {
@@ -38,4 +41,3 @@ func cacheGetCurrentCredential() *Credential {
 		SecretKey: currentCredentialCache.CacheGetString(keyCurrentCredentialSK),
 	}
 }
-
