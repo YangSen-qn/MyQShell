@@ -2,8 +2,8 @@ package param
 
 import (
 	"github.com/spf13/cobra"
-	"qshell/common"
-	"qshell/execute"
+	"qshell/cmd/common"
+	"qshell/cmd/execute"
 )
 
 type ParamCMDConfig struct {
@@ -11,6 +11,7 @@ type ParamCMDConfig struct {
 	Short                  string
 	Long                   string
 	Version                string
+	Example                string
 	BashCompletionFunction string
 }
 
@@ -56,7 +57,7 @@ func (paramCMD *ParamCMD) ConfigParamCMDParseConfig(paramCMDConfig ParamCMDConfi
 		SuggestFor:             nil,
 		Short:                  paramCMDConfig.Short,
 		Long:                   paramCMDConfig.Long,
-		Example:                "",
+		Example:                paramCMDConfig.Example,
 		ValidArgs:              nil,
 		ValidArgsFunction:      nil,
 		Args:                   nil,

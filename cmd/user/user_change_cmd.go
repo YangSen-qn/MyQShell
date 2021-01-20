@@ -1,32 +1,28 @@
 package user
 
 import (
+	"qshell/cmd/common"
+	"qshell/cmd/execute"
 	"qshell/cmd/param"
-	"qshell/common"
-	"qshell/execute"
+	"qshell/qn_shell_error"
 	"qshell/iqshell/user"
-	"qshell/output"
 )
 
 type userChangeCMD struct {
 	*param.ParamCMD
+
+	name string
 }
 
-func (cmd *userChangeCMD) Execute(context *common.QShellContext) common.IQShellError {
-	userList := user.CredentialList()
-
-	u := &user.Credential{
-		IsCurrent: false,
-		Name:      "kodo",
-		AccessKey: "accessKey",
-		SecretKey: "secretKey",
-	}
-	output.OutputResult(cmd, u)
-
-	for _, u := range userList {
-		output.OutputResult(cmd, u)
+func (cmd *userChangeCMD) Check(context *common.QShellContext) qn_shell_error.IQShellError {
+	if cmd.name == "" {
+		return qn_shell_error.NewInvalidUserParamError("name can not empty")
 	}
 	return nil
+}
+
+func (cmd *userChangeCMD) Execute(context *common.QShellContext) qn_shell_error.IQShellError {
+	return user.SetCurrentCredential(cmd.name)
 }
 
 func configUserChangeCMD(root param.IParamCMD) {
@@ -40,9 +36,11 @@ func configUserChangeCMD(root param.IParamCMD) {
 
 	cmd.ConfigParamCMDParseConfig(param.ParamCMDConfig{
 		Use:   "change",
-		Short: "manager user",
+		Short: "change current credential",
 		Long:  "",
 	})
+
+	cmd.FlagsStringVar(&cmd.name, "name", "", "", "credential name")
 
 	root.AddCMD(cmd)
 }

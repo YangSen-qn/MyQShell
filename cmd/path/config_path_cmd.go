@@ -1,4 +1,4 @@
-package version
+package path
 
 import (
 	"qshell/cmd/common"
@@ -6,19 +6,20 @@ import (
 	"qshell/cmd/output"
 	"qshell/cmd/param"
 	error2 "qshell/qn_shell_error"
+	"qshell/iqshell/config"
 )
 
-type versionCMD struct {
+type configPathCMD struct {
 	*param.ParamCMD
 }
 
-func (cmd *versionCMD) Execute(context *common.QShellContext) error2.IQShellError {
-	output.OutputResult(cmd, output.NewStringOutputData(common.GetVersion()))
+func (cmd *configPathCMD) Execute(context *common.QShellContext) error2.IQShellError {
+	output.OutputResult(cmd, output.NewStringOutputData(config.GetConfigPath()))
 	return nil
 }
 
-func ConfigCMD(root param.IParamCMD) {
-	cmd := &versionCMD{
+func configConfigPathCMD(root param.IParamCMD) {
+	cmd := &configPathCMD{
 		ParamCMD: param.NewParamCMD(),
 	}
 
@@ -27,8 +28,8 @@ func ConfigCMD(root param.IParamCMD) {
 	})
 
 	cmd.ConfigParamCMDParseConfig(param.ParamCMDConfig{
-		Use:   "version",
-		Short: "show version",
+		Use:   "config",
+		Short: "manager config path",
 		Long:  "",
 	})
 

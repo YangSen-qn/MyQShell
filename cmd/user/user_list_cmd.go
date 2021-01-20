@@ -1,27 +1,24 @@
 package user
 
 import (
+	"qshell/cmd/common"
+	"qshell/cmd/execute"
+	"qshell/cmd/output"
 	"qshell/cmd/param"
-	"qshell/common"
-	"qshell/execute"
+	error2 "qshell/qn_shell_error"
 	"qshell/iqshell/user"
-	"qshell/output"
 )
 
 type userListCMD struct {
 	*param.ParamCMD
 }
 
-func (cmd *userListCMD) Execute(context *common.QShellContext) common.IQShellError {
+func (cmd *userListCMD) Execute(context *common.QShellContext) error2.IQShellError {
 	userList := user.CredentialList()
-
-	u := &user.Credential{
-		IsCurrent: false,
-		Name:      "kodo",
-		AccessKey: "accessKey",
-		SecretKey: "secretKey",
+	if len(userList) == 0 {
+		output.OutputResult(cmd, output.NewStringOutputData("credential list is empty"))
+		return nil
 	}
-	output.OutputResult(cmd, u)
 
 	for _, u := range userList {
 		output.OutputResult(cmd, u)
@@ -40,7 +37,7 @@ func configUserListCMD(root param.IParamCMD) {
 
 	cmd.ConfigParamCMDParseConfig(param.ParamCMDConfig{
 		Use:   "list",
-		Short: "user list",
+		Short: "list credential",
 		Long:  "",
 	})
 

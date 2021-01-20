@@ -1,9 +1,7 @@
 package user
 
-import "qshell/common"
-
-const (
-	CurrentCredentialNameKey = "currentCredential"
+import (
+	"qshell/qn_shell_error"
 )
 
 var (
@@ -16,41 +14,23 @@ type Credential struct {
 	SecretKey string `json:"secret_key"`
 }
 
-func (user *Credential) String() string {
-	return "Name:" + user.Name + " AccessKey:" + user.AccessKey + " SecretKey:" + user.SecretKey
+func (credential *Credential) String() string {
+	return "Name:" + credential.Name + " AccessKey:" + credential.AccessKey + " SecretKey:" + credential.SecretKey
+}
+
+func (credential *Credential) isValid() bool {
+	return credential.Name != "" && credential.AccessKey != "" && credential.SecretKey != ""
+}
+
+func (credential *Credential) checkValid() qn_shell_error.IQShellError {
+	if credential.isValid() {
+		return nil
+	} else {
+		return qn_shell_error.NewInvalidUserParamError("credential is invalid for name:" + credential.Name)
+	}
 }
 
 // ------------- api -------------
-func init() {
-	setupCurrentCredential()
-}
-
-func getCurrentCredentialNameFromDisk() string {
-	return ""
-}
-
-func saveCurrentCredentialNameToDisk() {
-
-}
-
-func setupCurrentCredential() {
-	currentCredential = CurrentCredential()
-	if currentCredential != nil {
-		return
-	}
-
-	allCredential := CredentialList()
-	if allCredential != nil && len(allCredential) > 0 {
-		currentCredential = allCredential[0]
-	} else {
-		currentCredential = nil
-	}
-
-	if currentCredential != nil {
-		saveCurrentCredentialNameToDisk()
-	}
-}
-
 func CredentialList() [] *Credential {
 	return credentialListFromDB()
 }
@@ -59,18 +39,40 @@ func CurrentCredential() *Credential {
 	if currentCredential != nil {
 		return currentCredential
 	}
-	currentCredential = GetCredential(getCurrentCredentialNameFromDisk())
-	return currentCredential
-}
 
-func SetCurrentCredential(name string) common.IQShellError {
-	c := GetCredential(name)
-	if c == nil {
-		return common.NewQShellError(-1, "not exist credential for name:"+name)
+	currentCredential = cacheGetCurrentCredential()
+	if currentCredential != nil && currentCredential.isValid() {
+		return currentCredential
 	}
 
-	currentCredential = c
-	saveCurrentCredentialNameToDisk()
+	allCredential := CredentialList()
+	for _, credential := range allCredential {
+		if credential.isValid() {
+			currentCredential = credential
+			break
+		}
+	}
+
+	if currentCredential.isValid() {
+		cacheSetCurrentCredential(currentCredential)
+		return currentCredential
+	} else {
+		return nil
+	}
+}
+
+func SetCurrentCredential(name string) qn_shell_error.IQShellError {
+	credential := GetCredential(name)
+	if credential == nil {
+		return qn_shell_error.NewInvalidUserParamError("not exist credential for name:" + name)
+	}
+
+	if !credential.isValid() {
+		return qn_shell_error.NewInvalidUserParamError("credential is invalid for name:" + name)
+	}
+
+	currentCredential = credential
+	cacheSetCurrentCredential(currentCredential)
 	return nil
 }
 
@@ -78,7 +80,7 @@ func GetCredential(name string) *Credential {
 	return getCredentialFromDB(name)
 }
 
-func RemoveCredential(name string) common.IQShellError {
+func RemoveCredential(name string) qn_shell_error.IQShellError {
 	err := removeCredentialFromDB(name)
 	if err != nil {
 		return err
@@ -86,16 +88,19 @@ func RemoveCredential(name string) common.IQShellError {
 
 	if name == currentCredential.Name {
 		currentCredential = nil
-		setupCurrentCredential()
+		cacheRemoveCurrentCredential()
 	}
 
 	return err
 }
 
-func AddCredential(credential *Credential) common.IQShellError {
-	err := addCredentialToDB(credential)
-	if err  == nil{
-		setupCurrentCredential()
+func AddCredential(credential *Credential) qn_shell_error.IQShellError {
+	if !credential.isValid() {
+		return qn_shell_error.NewInvalidUserParamError("credential info is invalid")
 	}
-	return err
+
+	cacheSetCurrentCredential(credential)
+
+	return addCredentialToDB(credential, false)
 }
+

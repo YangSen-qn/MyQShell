@@ -2,10 +2,11 @@ package root
 
 import (
 	"qshell/cmd/param"
+	"qshell/cmd/path"
 	"qshell/cmd/user"
 	"qshell/cmd/version"
 
-	"qshell/common"
+	"qshell/cmd/common"
 )
 
 var (
@@ -40,6 +41,7 @@ func init() {
 func configSubCMD() {
 	version.ConfigCMD(rootCmd)
 	user.ConfigCMD(rootCmd)
+	path.ConfigCMD(rootCmd)
 }
 
 func Execute() error {

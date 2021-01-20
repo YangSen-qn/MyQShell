@@ -2,7 +2,7 @@ package output
 
 import (
 	"fmt"
-	"qshell/common"
+	error2 "qshell/qn_shell_error"
 	"strings"
 )
 
@@ -102,7 +102,7 @@ type StdOutput struct {
 	IsColorful bool
 }
 
-func (output *StdOutput) Output(outputType OutputType, data IOutputData, err common.IQShellError) {
+func (output *StdOutput) Output(outputType OutputType, data IOutputData, err error2.IQShellError) {
 	if outputType == OutputTypeInit ||
 		outputType == OutputTypeComplete {
 		return

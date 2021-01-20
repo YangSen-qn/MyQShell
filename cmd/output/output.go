@@ -1,7 +1,8 @@
 package output
 
 import (
-	"qshell/common"
+	"qshell/cmd/common"
+	"qshell/qn_shell_error"
 )
 
 type OutputType int8
@@ -16,10 +17,10 @@ const (
 )
 
 type IOutput interface {
-	Output(outputType OutputType, data IOutputData, err common.IQShellError)
+	Output(outputType OutputType, data IOutputData, err qn_shell_error.IQShellError)
 }
 
-func OutputInit(output IOutput, err common.IQShellError) {
+func OutputInit(output IOutput, err qn_shell_error.IQShellError) {
 	output.Output(OutputTypeInit, nil, err)
 }
 
@@ -27,7 +28,7 @@ func OutputProgress(output IOutput, data IOutputData) {
 	output.Output(OutputTypeProgress, data, nil)
 }
 
-func OutputError(output IOutput, err common.IQShellError) {
+func OutputError(output IOutput, err qn_shell_error.IQShellError) {
 	output.Output(OutputTypeError, nil, err)
 }
 
@@ -35,7 +36,7 @@ func OutputResult(output IOutput, result IOutputData) {
 	output.Output(OutputTypeResult, result, nil)
 }
 
-func OutputComplete(output IOutput, err common.IQShellError) {
+func OutputComplete(output IOutput, err qn_shell_error.IQShellError) {
 	output.Output(OutputTypeComplete, nil, err)
 }
 

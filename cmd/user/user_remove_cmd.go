@@ -1,32 +1,28 @@
 package user
 
 import (
+	"qshell/cmd/common"
+	"qshell/cmd/execute"
 	"qshell/cmd/param"
-	"qshell/common"
-	"qshell/execute"
+	"qshell/qn_shell_error"
 	"qshell/iqshell/user"
-	"qshell/output"
 )
 
 type userRemoveCMD struct {
 	*param.ParamCMD
+
+	name string
 }
 
-func (cmd *userRemoveCMD) Execute(context *common.QShellContext) common.IQShellError {
-	userList := user.CredentialList()
-
-	u := &user.Credential{
-		IsCurrent: false,
-		Name:      "kodo",
-		AccessKey: "accessKey",
-		SecretKey: "secretKey",
-	}
-	output.OutputResult(cmd, u)
-
-	for _, u := range userList {
-		output.OutputResult(cmd, u)
+func (cmd *userRemoveCMD) Check(context *common.QShellContext) qn_shell_error.IQShellError {
+	if cmd.name == "" {
+		return qn_shell_error.NewInvalidUserParamError("name can not empty")
 	}
 	return nil
+}
+
+func (cmd *userRemoveCMD) Execute(context *common.QShellContext) qn_shell_error.IQShellError {
+	return user.RemoveCredential(cmd.name)
 }
 
 func configUserRemoveCMD(root param.IParamCMD) {
@@ -40,9 +36,11 @@ func configUserRemoveCMD(root param.IParamCMD) {
 
 	cmd.ConfigParamCMDParseConfig(param.ParamCMDConfig{
 		Use:   "remove",
-		Short: "manager user",
+		Short: "remove credential",
 		Long:  "",
 	})
+
+	cmd.FlagsStringVar(&cmd.name, "name", "", "", "credential name")
 
 	root.AddCMD(cmd)
 }
