@@ -1,4 +1,4 @@
-package param
+package param_cmd
 
 import (
 	"github.com/spf13/cobra"

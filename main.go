@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"qshell/cmd/root"
+	"qshell/cmd/root_cmd"
 )
 
 func main() {
-	if err := root.Execute(); err != nil {
+	if err := root_cmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
 		os.Exit(1)
 	}

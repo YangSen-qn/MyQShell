@@ -1,10 +1,9 @@
-package user
+package credential
 
 import (
 	"encoding/json"
 	"github.com/syndtr/goleveldb/leveldb/opt"
-	"qshell/iqshell/utils"
-	"qshell/qn_shell_error"
+	"qshell/qn_error"
 
 	"github.com/syndtr/goleveldb/leveldb"
 )
@@ -84,14 +83,14 @@ func getCredentialFromDB(name string) *Credential {
 	return credential
 }
 
-func removeCredentialFromDB(name string) qn_shell_error.IQShellError {
+func removeCredentialFromDB(name string) qn_error.IError {
 	if !isDBPathValid(dbPath) {
-		return qn_shell_error.NewInvalidFilePathError("db path is invalid")
+		return qn_error.NewInvalidFilePathError("db path is invalid")
 	}
 
 	db, dbErr := leveldb.OpenFile(dbPath, nil)
 	if dbErr != nil {
-		return qn_shell_error.NewInvalidDBError(dbErr.Error())
+		return qn_error.NewInvalidDBError(dbErr.Error())
 	}
 	defer db.Close()
 
@@ -100,31 +99,31 @@ func removeCredentialFromDB(name string) qn_shell_error.IQShellError {
 	}
 	dbErr = db.Delete([]byte(name), dbWOpt)
 	if dbErr != nil {
-		return qn_shell_error.NewInvalidDBError(dbErr.Error())
+		return qn_error.NewInvalidDBError(dbErr.Error())
 	}
 
 	return nil
 }
 
-func addCredentialToDB(credential *Credential, isCover bool) qn_shell_error.IQShellError {
+func addCredentialToDB(credential *Credential, isCover bool) qn_error.IError {
 	if !isDBPathValid(dbPath) {
-		return qn_shell_error.NewInvalidFilePathError("db path is invalid")
+		return qn_error.NewInvalidFilePathError("db path is invalid")
 	}
 
 	db, dbErr := leveldb.OpenFile(dbPath, nil)
 	if dbErr != nil {
-		return qn_shell_error.NewInvalidDBError(dbErr.Error())
+		return qn_error.NewInvalidDBError(dbErr.Error())
 	}
 	defer db.Close()
 
 	if !isCover {
 		exists, dbErr := db.Has([]byte(credential.Name), nil)
 		if dbErr != nil {
-			return qn_shell_error.NewInvalidDBError(dbErr.Error())
+			return qn_error.NewInvalidDBError(dbErr.Error())
 		}
 
 		if exists {
-			return qn_shell_error.NewInvalidUserParamError("credential name:" + credential.Name + " already exist in local db")
+			return qn_error.NewInvalidUserParamError("credential name:" + credential.Name + " already exist in local db")
 		}
 	}
 
@@ -145,17 +144,17 @@ func addCredentialToDB(credential *Credential, isCover bool) qn_shell_error.IQSh
 
 	dbErr = db.Put(dbKey, dbValue, dbWOpt)
 	if dbErr != nil {
-		return qn_shell_error.NewInvalidDBError(dbErr.Error())
+		return qn_error.NewInvalidDBError(dbErr.Error())
 	}
 
 	return nil
 }
 
 // 对SecretKey进行加密， 保存AccessKey, 加密后的SecretKey在本地数据库中
-func encrypt(credential *Credential) (newCredential *Credential, err qn_shell_error.IQShellError) {
-	encryptedKey, eErr := utils.EncryptSecretKey(credential.AccessKey, credential.SecretKey)
+func encrypt(credential *Credential) (newCredential *Credential, err qn_error.IError) {
+	encryptedKey, eErr := encryptSecretKey(credential.AccessKey, credential.SecretKey)
 	if eErr != nil {
-		err = qn_shell_error.NewInvalidCryptError("secret key encrypt error")
+		err = qn_error.NewInvalidCryptError("secret key encrypt error")
 		return
 	}
 
@@ -168,10 +167,10 @@ func encrypt(credential *Credential) (newCredential *Credential, err qn_shell_er
 }
 
 // 对本地数据库中 credential 进行解密
-func decrypt(credential *Credential) (newCredential *Credential, err qn_shell_error.IQShellError) {
-	secretKey, dErr := utils.DecryptSecretKey(credential.AccessKey, credential.SecretKey)
+func decrypt(credential *Credential) (newCredential *Credential, err qn_error.IError) {
+	secretKey, dErr := decryptSecretKey(credential.AccessKey, credential.SecretKey)
 	if dErr != nil {
-		err = qn_shell_error.NewInvalidCryptError("secret key decrypt error")
+		err = qn_error.NewInvalidCryptError("secret key decrypt error")
 		return
 	}
 
@@ -187,23 +186,23 @@ func credentialDBId(credential *Credential) string {
 	return credential.Name
 }
 
-func credentialToDBValue(credential *Credential) (value []byte, err qn_shell_error.IQShellError) {
+func credentialToDBValue(credential *Credential) (value []byte, err qn_error.IError) {
 	if err != nil {
 		return
 	}
 
 	value, jErr := json.Marshal(credential)
 	if jErr != nil {
-		err = qn_shell_error.NewInvalidIOError(jErr.Error())
+		err = qn_error.NewInvalidIOError(jErr.Error())
 	}
 	return
 }
 
-func credentialFromDBValue(value []byte) (credential *Credential, err qn_shell_error.IQShellError) {
+func credentialFromDBValue(value []byte) (credential *Credential, err qn_error.IError) {
 	credential = &Credential{}
 	jErr := json.Unmarshal(value, credential)
 	if jErr != nil {
-		err = qn_shell_error.NewInvalidIOError(jErr.Error())
+		err = qn_error.NewInvalidIOError(jErr.Error())
 	}
 	return
 }

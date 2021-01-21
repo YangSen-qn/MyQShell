@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"qshell/iqshell/cache"
-	"qshell/qn_shell_error"
+	"qshell/qn_error"
 )
 
 const (
@@ -39,7 +39,7 @@ func SetLoadConfig(loadConfig *LoadConfig)  {
 	config = loadConfig
 }
 
-func GetCredentialDBPath() (path string, err qn_shell_error.IQShellError) {
+func GetCredentialDBPath() (path string, err qn_error.IError) {
 	path, err = RootPath()
 	if err != nil {
 		return
@@ -50,7 +50,7 @@ func GetCredentialDBPath() (path string, err qn_shell_error.IQShellError) {
 }
 
 // config path
-func GetConfigPath() (path string, err qn_shell_error.IQShellError)  {
+func GetConfigPath() (path string, err qn_error.IError)  {
 	path, err = RootPath()
 	if err != nil {
 		return
@@ -61,12 +61,12 @@ func GetConfigPath() (path string, err qn_shell_error.IQShellError)  {
 }
 
 // 获取ROOTPath
-func RootPath() (path string, err qn_shell_error.IQShellError) {
+func RootPath() (path string, err qn_error.IError) {
 	if config.RootDir == "" {
 		config.RootDir = defaultRootPath()
 	}
 	if config.RootDir == "" {
-		err = qn_shell_error.NewInvalidFilePathError("root dir not exist")
+		err = qn_error.NewInvalidFilePathError("root dir not exist")
 	}
 	path = config.RootDir
 	return

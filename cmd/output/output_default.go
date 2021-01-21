@@ -2,7 +2,8 @@ package output
 
 import (
 	"fmt"
-	error2 "qshell/qn_shell_error"
+	"qshell/cmd/output/message"
+	error2 "qshell/qn_error"
 	"strings"
 )
 
@@ -98,11 +99,11 @@ func printBeautifulNewLine() {
 }
 
 /// 业务相关
-type StdOutput struct {
+type DefaultOutput struct {
 	IsColorful bool
 }
 
-func (output *StdOutput) Output(outputType OutputType, data IOutputData, err error2.IQShellError) {
+func (output *DefaultOutput) Output(outputType OutputType, data message.IOutputMessage, err error2.IError) {
 	if outputType == OutputTypeInit ||
 		outputType == OutputTypeComplete {
 		return

@@ -4,16 +4,16 @@ import (
 	"qshell/cmd/common"
 	"qshell/cmd/output"
 	"qshell/iqshell/load"
-	error2 "qshell/qn_shell_error"
+	error2 "qshell/qn_error"
 )
 
 type IExecute interface {
 	GetOutput() output.IOutput
 	SetOutput(output output.IOutput)
 
-	Check(context *common.QShellContext) error2.IQShellError
-	Prepare(context *common.QShellContext) error2.IQShellError
-	Execute(context *common.QShellContext) error2.IQShellError
+	Check(context *common.QShellContext) error2.IError
+	Prepare(context *common.QShellContext) error2.IError
+	Execute(context *common.QShellContext) error2.IError
 }
 
 func Execute(exe IExecute, context *common.QShellContext) {

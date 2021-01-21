@@ -1,10 +1,10 @@
-package root
+package root_cmd
 
 import (
-	"qshell/cmd/param"
-	"qshell/cmd/path"
-	"qshell/cmd/user"
-	"qshell/cmd/version"
+	"qshell/cmd/param_cmd"
+	"qshell/cmd/path_cmd"
+	"qshell/cmd/credential_cmd"
+	"qshell/cmd/version_cmd"
 
 	"qshell/cmd/common"
 )
@@ -14,17 +14,17 @@ var (
 )
 
 type RootCMD struct {
-	*param.ParamCMD
+	*param_cmd.ParamCMD
 }
 
 var rootCmd *RootCMD
 
 func init() {
 	rootCmd = &RootCMD{
-		ParamCMD: param.NewParamCMD(),
+		ParamCMD: param_cmd.NewParamCMD(),
 	}
 
-	rootCmd.ConfigParamCMDParseConfig(param.ParamCMDConfig{
+	rootCmd.ConfigParamCMDParseConfig(param_cmd.ParamCMDConfig{
 		Use:                    "qshell",
 		Short:                  "",
 		Long:                   "",
@@ -36,9 +36,9 @@ func init() {
 }
 
 func configSubCMD() {
-	version.ConfigCMD(rootCmd)
-	user.ConfigCMD(rootCmd)
-	path.ConfigCMD(rootCmd)
+	version_cmd.LoadCMD(rootCmd)
+	credential_cmd.LoadCMD(rootCmd)
+	path_cmd.LoadCMD(rootCmd)
 }
 
 func Execute() error {

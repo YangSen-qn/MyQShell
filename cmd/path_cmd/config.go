@@ -1,37 +1,38 @@
-package path
+package path_cmd
 
 import (
 	"qshell/cmd/common"
 	"qshell/cmd/execute"
 	"qshell/cmd/output"
-	"qshell/cmd/param"
+	"qshell/cmd/output/message"
+	"qshell/cmd/param_cmd"
 	"qshell/iqshell/config"
-	"qshell/qn_shell_error"
+	"qshell/qn_error"
 )
 
 type configPathCMD struct {
-	*param.ParamCMD
+	*param_cmd.ParamCMD
 }
 
-func (cmd *configPathCMD) Execute(context *common.QShellContext) qn_shell_error.IQShellError {
+func (cmd *configPathCMD) Execute(context *common.QShellContext) qn_error.IError {
 	path, err := config.GetConfigPath()
 	if err != nil {
 		return nil
 	}
-	output.OutputResult(cmd, output.NewStringOutputData(path))
+	output.OutputResult(cmd, message.NewStringOutputData(path))
 	return nil
 }
 
-func configConfigPathCMD(root param.IParamCMD) {
+func loadConfigPathCMD(root param_cmd.IParamCMD) {
 	cmd := &configPathCMD{
-		ParamCMD: param.NewParamCMD(),
+		ParamCMD: param_cmd.NewParamCMD(),
 	}
 
 	cmd.ConfigParamCMDExecuteConfig(execute.CommandConfig{
 		ExecuteFunction: cmd.Execute,
 	})
 
-	cmd.ConfigParamCMDParseConfig(param.ParamCMDConfig{
+	cmd.ConfigParamCMDParseConfig(param_cmd.ParamCMDConfig{
 		Use:   "config",
 		Short: "manager config path",
 		Long:  "",

@@ -1,4 +1,4 @@
-package utils
+package qn_util
 
 import (
 	"bytes"

@@ -1,4 +1,4 @@
-package qn_shell_error
+package qn_error
 
 const (
 	QShellErrorCodeWarning = "Warning"
@@ -10,26 +10,26 @@ const (
 )
 
 
-func NewInvalidUserParamError(description string) *QShellError {
+func NewInvalidUserParamError(description string) *Error {
 	return NewHeavyError(QShellErrorCodeInvalidUserParam, description)
 }
 
-func NewInvalidDBError(description string) *QShellError {
+func NewInvalidDBError(description string) *Error {
 	return NewHeavyError(QShellErrorCodeDBPathError, description)
 }
 
-func NewInvalidFilePathError(description string) *QShellError {
+func NewInvalidFilePathError(description string) *Error {
 	return NewHeavyError(QShellErrorCodeFilePathError, description)
 }
 
-func NewInvalidCryptError(description string) *QShellError {
+func NewInvalidCryptError(description string) *Error {
 	return NewHeavyError(QShellErrorCodeCryptError, description)
 }
 
-func NewInvalidIOError(description string) *QShellError {
+func NewInvalidIOError(description string) *Error {
 	return NewHeavyError(QShellErrorCodeIOError, description)
 }
 
-func NewInvalidWarningError(description string) *QShellError {
+func NewInvalidWarningError(description string) *Error {
 	return NewHeavyError(QShellErrorCodeWarning, description)
 }

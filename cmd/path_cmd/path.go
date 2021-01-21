@@ -1,23 +1,23 @@
-package path
+package path_cmd
 
 import (
-	"qshell/cmd/param"
+	"qshell/cmd/param_cmd"
 )
 
 type pathCMD struct {
-	*param.ParamCMD
+	*param_cmd.ParamCMD
 }
 
-func configThePathCMD(root param.IParamCMD) param.IParamCMD  {
+func configThePathCMD(root param_cmd.IParamCMD) param_cmd.IParamCMD  {
 	cmd := &pathCMD{
-		ParamCMD: param.NewParamCMD(),
+		ParamCMD: param_cmd.NewParamCMD(),
 	}
 
 	//cmd.ConfigParamCMDExecuteConfig(execute.CommandConfig{
 	//	ExecuteFunction: cmd.Execute,
 	//})
 
-	cmd.ConfigParamCMDParseConfig(param.ParamCMDConfig{
+	cmd.ConfigParamCMDParseConfig(param_cmd.ParamCMDConfig{
 		Use:                    "path",
 		Short:                  "manager path",
 		Long:                   "",
@@ -27,8 +27,8 @@ func configThePathCMD(root param.IParamCMD) param.IParamCMD  {
 	return cmd
 }
 
-func ConfigCMD(root param.IParamCMD) {
+func LoadCMD(root param_cmd.IParamCMD) {
 	path := configThePathCMD(root)
-	configRootPathCMD(path)
-	configConfigPathCMD(path)
+	loadRootPathCMD(path)
+	loadConfigPathCMD(path)
 }
