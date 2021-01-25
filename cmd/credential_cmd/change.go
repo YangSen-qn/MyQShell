@@ -31,6 +31,7 @@ func loadUserChangeCMD(root param_cmd.IParamCMD) {
 	}
 
 	cmd.ConfigParamCMDExecuteConfig(execute.CommandConfig{
+		CheckFunction:cmd.Check,
 		ExecuteFunction: cmd.Execute,
 	})
 

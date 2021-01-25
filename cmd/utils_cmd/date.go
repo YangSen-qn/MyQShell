@@ -1,6 +1,7 @@
 package utils_cmd
 
 import (
+	"fmt"
 	"qshell/cmd/common"
 	"qshell/cmd/execute"
 	"qshell/cmd/output"
@@ -8,6 +9,7 @@ import (
 	"qshell/cmd/param_cmd"
 	"qshell/qn_error"
 	"qshell/qn_util"
+	"strconv"
 )
 
 type dateCMD struct {
@@ -33,8 +35,10 @@ func (cmd *dateCMD) Execute(context *common.QShellContext) qn_error.IError {
 	var timestamp int64
 	if cmd.timestamp == -1 {
 		timestamp = qn_util.Timestamp()
+		fmt.Println("=== A")
 	} else {
 		timestamp = cmd.timestamp
+		fmt.Println("=== B:", strconv.Itoa(int(cmd.timestamp)))
 	}
 
 	date := qn_util.DateWithTimestamp(timestamp, -1*before)
@@ -57,7 +61,7 @@ func loadDateCMD(root param_cmd.IParamCMD) param_cmd.IParamCMD {
 		Long:  "",
 	})
 
-	cmd.FlagsInt64Var(&cmd.before, "timestamp", "", -1, "get date by timestamp")
+	cmd.FlagsInt64Var(&cmd.timestamp, "timestamp", "", -1, "get date by timestamp")
 	cmd.FlagsInt64Var(&cmd.before, "before", "", 0, "value of date before, get date by timestamp is set or set by current")
 	cmd.FlagsBoolVar(&cmd.isSecond, "seconds", "", true, "unit is seconds")
 	cmd.FlagsBoolVar(&cmd.isMilli, "milli", "", false, "unit is milli second")

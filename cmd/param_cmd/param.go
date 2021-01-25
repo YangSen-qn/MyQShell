@@ -32,6 +32,7 @@ type ParamCMD struct {
 	supperCMD IParamCMD
 	cmd       *cobra.Command
 
+	args   []string
 	config *common.Config
 }
 
@@ -72,6 +73,7 @@ func (paramCMD *ParamCMD) ConfigParamCMDParseConfig(paramCMDConfig ParamCMDConfi
 		PreRun:                 nil,
 		PreRunE:                nil,
 		Run: func(cmd *cobra.Command, args []string) {
+			paramCMD.args = args
 			context := common.NewQShellContext(cmd.Context())
 			context.SetConfig(paramCMD.config)
 			execute.Execute(paramCMD, context)
@@ -130,4 +132,16 @@ func (cmd *ParamCMD) getCobraCMD() *cobra.Command {
 
 func (cmd *ParamCMD) CobraExecute() error {
 	return cmd.cmd.Execute()
+}
+
+func (cmd *ParamCMD) GetArgs() []string {
+	return cmd.args
+}
+
+func (cmd *ParamCMD) GetFirstArg() string {
+	if cmd.args != nil && len(cmd.args) > 0 {
+		return cmd.args[0]
+	} else {
+		return ""
+	}
 }
