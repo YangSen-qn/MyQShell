@@ -11,4 +11,5 @@ func LoadCMD(root param_cmd.IParamCMD) {
 	loadEtagCMD(root)
 	loadFileSizeCMD(root)
 	loadRPCCMD(root)
+	loadParseRequestIdCMD(root)
 }
