@@ -85,12 +85,12 @@ func getCredentialFromDB(name string) *Credential {
 
 func removeCredentialFromDB(name string) qn_error.IError {
 	if !isDBPathValid(dbPath) {
-		return qn_error.NewInvalidFilePathError("db path is invalid")
+		return qn_error.NewFilePathError("db path is invalid")
 	}
 
 	db, dbErr := leveldb.OpenFile(dbPath, nil)
 	if dbErr != nil {
-		return qn_error.NewInvalidDBError(dbErr.Error())
+		return qn_error.NewDBError(dbErr.Error())
 	}
 	defer db.Close()
 
@@ -99,7 +99,7 @@ func removeCredentialFromDB(name string) qn_error.IError {
 	}
 	dbErr = db.Delete([]byte(name), dbWOpt)
 	if dbErr != nil {
-		return qn_error.NewInvalidDBError(dbErr.Error())
+		return qn_error.NewDBError(dbErr.Error())
 	}
 
 	return nil
@@ -107,19 +107,19 @@ func removeCredentialFromDB(name string) qn_error.IError {
 
 func addCredentialToDB(credential *Credential, isCover bool) qn_error.IError {
 	if !isDBPathValid(dbPath) {
-		return qn_error.NewInvalidFilePathError("db path is invalid")
+		return qn_error.NewFilePathError("db path is invalid")
 	}
 
 	db, dbErr := leveldb.OpenFile(dbPath, nil)
 	if dbErr != nil {
-		return qn_error.NewInvalidDBError(dbErr.Error())
+		return qn_error.NewDBError(dbErr.Error())
 	}
 	defer db.Close()
 
 	if !isCover {
 		exists, dbErr := db.Has([]byte(credential.Name), nil)
 		if dbErr != nil {
-			return qn_error.NewInvalidDBError(dbErr.Error())
+			return qn_error.NewDBError(dbErr.Error())
 		}
 
 		if exists {
@@ -144,7 +144,7 @@ func addCredentialToDB(credential *Credential, isCover bool) qn_error.IError {
 
 	dbErr = db.Put(dbKey, dbValue, dbWOpt)
 	if dbErr != nil {
-		return qn_error.NewInvalidDBError(dbErr.Error())
+		return qn_error.NewDBError(dbErr.Error())
 	}
 
 	return nil
@@ -154,7 +154,7 @@ func addCredentialToDB(credential *Credential, isCover bool) qn_error.IError {
 func encrypt(credential *Credential) (newCredential *Credential, err qn_error.IError) {
 	encryptedKey, eErr := encryptSecretKey(credential.AccessKey, credential.SecretKey)
 	if eErr != nil {
-		err = qn_error.NewInvalidCryptError("secret key encrypt error")
+		err = qn_error.NewCryptError("secret key encrypt error")
 		return
 	}
 
@@ -170,7 +170,7 @@ func encrypt(credential *Credential) (newCredential *Credential, err qn_error.IE
 func decrypt(credential *Credential) (newCredential *Credential, err qn_error.IError) {
 	secretKey, dErr := decryptSecretKey(credential.AccessKey, credential.SecretKey)
 	if dErr != nil {
-		err = qn_error.NewInvalidCryptError("secret key decrypt error")
+		err = qn_error.NewCryptError("secret key decrypt error")
 		return
 	}
 
@@ -193,7 +193,7 @@ func credentialToDBValue(credential *Credential) (value []byte, err qn_error.IEr
 
 	value, jErr := json.Marshal(credential)
 	if jErr != nil {
-		err = qn_error.NewInvalidIOError(jErr.Error())
+		err = qn_error.NewIOError(jErr.Error())
 	}
 	return
 }
@@ -202,7 +202,7 @@ func credentialFromDBValue(value []byte) (credential *Credential, err qn_error.I
 	credential = &Credential{}
 	jErr := json.Unmarshal(value, credential)
 	if jErr != nil {
-		err = qn_error.NewInvalidIOError(jErr.Error())
+		err = qn_error.NewIOError(jErr.Error())
 	}
 	return
 }

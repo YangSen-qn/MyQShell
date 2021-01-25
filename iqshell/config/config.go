@@ -66,7 +66,7 @@ func RootPath() (path string, err qn_error.IError) {
 		config.RootDir = defaultRootPath()
 	}
 	if config.RootDir == "" {
-		err = qn_error.NewInvalidFilePathError("root dir not exist")
+		err = qn_error.NewFilePathError("root dir not exist")
 	}
 	path = config.RootDir
 	return

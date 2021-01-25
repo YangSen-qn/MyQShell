@@ -8,4 +8,5 @@ func LoadCMD(root param_cmd.IParamCMD) {
 	loadDateCMD(root)
 	loadTimestampCMD(root)
 	loadUrlCMD(root)
+	loadEtagCMD(root)
 }

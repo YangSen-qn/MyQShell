@@ -19,13 +19,13 @@ func (cmd *credentialCMD) Execute(context *common.QShellContext) qn_error.IError
 	if cmd.name == "" {
 		currentCredential := credential.CurrentCredential()
 		if currentCredential == nil {
-			return qn_error.NewInvalidWarningError("current credential not exist")
+			return qn_error.NewWarningError("current credential not exist")
 		}
 		output.OutputResult(cmd, currentCredential)
 	} else {
 		credential := credential.GetCredential(cmd.name)
 		if credential == nil {
-			return qn_error.NewInvalidWarningError("credential not exist for name:" + cmd.name)
+			return qn_error.NewWarningError("credential not exist for name:" + cmd.name)
 		}
 		output.OutputResult(cmd, credential)
 	}

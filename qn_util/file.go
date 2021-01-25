@@ -29,13 +29,13 @@ func IsFileEmpty(filename string) bool {
 func CreateFile(filename string, defaultData string) qn_error.IError {
 	f, err := os.Create(filename)
 	if err != nil{
-		return qn_error.NewInvalidFilePathError(err.Error())
+		return qn_error.NewFilePathError(err.Error())
 	}
 	defer f.Close()
 
 	_, err = io.WriteString(f, defaultData)
 	if err != nil{
-		return qn_error.NewInvalidIOError(err.Error())
+		return qn_error.NewIOError(err.Error())
 	}
 
 	return nil
