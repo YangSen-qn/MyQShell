@@ -23,7 +23,7 @@ func (cmd *etagCMD) Prepare(context *common.QShellContext) qn_error.IError {
 
 func (cmd *etagCMD) Check(context *common.QShellContext) qn_error.IError {
 	if cmd.filePath == "" {
-		return qn_error.NewInvalidUserParamError("file path can not empty")
+		return qn_error.NewInvalidUserParamError("sourceFile path can not empty")
 	} else {
 		return nil
 	}
@@ -51,7 +51,7 @@ func loadEtagCMD(root param_cmd.IParamCMD) param_cmd.IParamCMD {
 
 	cmd.ConfigParamCMDParseConfig(param_cmd.ParamCMDConfig{
 		Use:   "etag <LocalFilePath>",
-		Short: "Calculate the hash of local file using the algorithm of qiniu qetag",
+		Short: "Calculate the hash of local sourceFile using the algorithm of qiniu qetag",
 		Long:  "",
 	})
 

@@ -9,4 +9,5 @@ func LoadCMD(root param_cmd.IParamCMD) {
 	loadTimestampCMD(root)
 	loadUrlCMD(root)
 	loadEtagCMD(root)
+	loadFileSizeCMD(root)
 }

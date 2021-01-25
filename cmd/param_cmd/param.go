@@ -145,3 +145,11 @@ func (cmd *ParamCMD) GetFirstArg() string {
 		return ""
 	}
 }
+
+func (cmd *ParamCMD) GetSecondArg() string {
+	if cmd.args != nil && len(cmd.args) > 1 {
+		return cmd.args[1]
+	} else {
+		return ""
+	}
+}
