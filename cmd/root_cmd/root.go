@@ -4,6 +4,7 @@ import (
 	"qshell/cmd/param_cmd"
 	"qshell/cmd/path_cmd"
 	"qshell/cmd/credential_cmd"
+	"qshell/cmd/utils_cmd"
 	"qshell/cmd/version_cmd"
 
 	"qshell/cmd/common"
@@ -39,6 +40,7 @@ func configSubCMD() {
 	version_cmd.LoadCMD(rootCmd)
 	credential_cmd.LoadCMD(rootCmd)
 	path_cmd.LoadCMD(rootCmd)
+	utils_cmd.LoadCMD(rootCmd)
 }
 
 func Execute() error {
