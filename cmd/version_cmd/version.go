@@ -3,8 +3,7 @@ package version_cmd
 import (
 	"qshell/cmd/common"
 	"qshell/cmd/execute"
-	"qshell/cmd/output"
-	"qshell/cmd/output/message"
+	"qshell/cmd/output/output_utils"
 	"qshell/cmd/param_cmd"
 	error2 "qshell/qn_error"
 )
@@ -14,7 +13,7 @@ type versionCMD struct {
 }
 
 func (cmd *versionCMD) Execute(context *common.QShellContext) error2.IError {
-	output.OutputResult(cmd, message.NewStringOutputData(common.GetVersion()))
+	output_utils.OutputResultWithString(cmd, common.GetVersion())
 	return nil
 }
 

@@ -3,8 +3,7 @@ package utils_cmd
 import (
 	"qshell/cmd/common"
 	"qshell/cmd/execute"
-	"qshell/cmd/output"
-	"qshell/cmd/output/message"
+	"qshell/cmd/output/output_utils"
 	"qshell/cmd/param_cmd"
 	"qshell/qn_error"
 	"qshell/qn_util"
@@ -40,7 +39,7 @@ func (cmd *fileSizeCMD) Check(context *common.QShellContext) qn_error.IError {
 func (cmd *fileSizeCMD) Execute(context *common.QShellContext) qn_error.IError {
 
 	fileSize := qn_util.FormatFsize(cmd.fileSize)
-	output.OutputResult(cmd, message.NewStringOutputData(fileSize))
+	output_utils.OutputResultWithString(cmd, fileSize)
 	return nil
 }
 

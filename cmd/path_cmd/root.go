@@ -3,8 +3,7 @@ package path_cmd
 import (
 	"qshell/cmd/common"
 	"qshell/cmd/execute"
-	"qshell/cmd/output"
-	"qshell/cmd/output/message"
+	"qshell/cmd/output/output_utils"
 	"qshell/cmd/param_cmd"
 	"qshell/iqshell/config"
 	qn_shell_error "qshell/qn_error"
@@ -20,7 +19,7 @@ func (cmd *rootPathCMD) Execute(context *common.QShellContext) qn_shell_error.IE
 		return err
 	}
 
-	output.OutputResult(cmd, message.NewStringOutputData(path))
+	output_utils.OutputResultWithString(cmd, path)
 	return nil
 }
 

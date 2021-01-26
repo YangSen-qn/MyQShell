@@ -3,8 +3,7 @@ package utils_cmd
 import (
 	"qshell/cmd/common"
 	"qshell/cmd/execute"
-	"qshell/cmd/output"
-	"qshell/cmd/output/message"
+	"qshell/cmd/output/output_utils"
 	"qshell/cmd/param_cmd"
 	"qshell/qn_error"
 )
@@ -31,7 +30,7 @@ func (cmd *unzipCMD) Check(context *common.QShellContext) qn_error.IError {
 func (cmd *unzipCMD) Execute(context *common.QShellContext) qn_error.IError {
 	filePath := cmd.sourceFile
 
-	output.OutputResult(cmd, message.NewStringOutputData(filePath))
+	output_utils.OutputResultWithString(cmd, filePath)
 	return nil
 }
 

@@ -4,7 +4,7 @@ import (
 	"qshell/cmd/common"
 	"qshell/cmd/execute"
 	"qshell/cmd/output"
-	"qshell/cmd/output/message"
+	"qshell/cmd/output/output_utils"
 	"qshell/cmd/param_cmd"
 	"qshell/iqshell/credential"
 	error2 "qshell/qn_error"
@@ -17,7 +17,7 @@ type listCMD struct {
 func (cmd *listCMD) Execute(context *common.QShellContext) error2.IError {
 	userList := credential.CredentialList()
 	if len(userList) == 0 {
-		output.OutputResult(cmd, message.NewStringOutputData("credential list is empty"))
+		output_utils.OutputResultWithString(cmd, "credential list is empty")
 		return nil
 	}
 

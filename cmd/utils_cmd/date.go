@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"qshell/cmd/common"
 	"qshell/cmd/execute"
-	"qshell/cmd/output"
-	"qshell/cmd/output/message"
+	"qshell/cmd/output/output_utils"
 	"qshell/cmd/param_cmd"
 	"qshell/qn_error"
 	"qshell/qn_util"
@@ -42,7 +41,7 @@ func (cmd *dateCMD) Execute(context *common.QShellContext) qn_error.IError {
 	}
 
 	date := qn_util.DateWithTimestamp(timestamp, -1*before)
-	output.OutputResult(cmd, message.NewStringOutputData(date))
+	output_utils.OutputResultWithString(cmd, date)
 	return nil
 }
 

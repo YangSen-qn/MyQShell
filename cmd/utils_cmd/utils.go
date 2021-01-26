@@ -12,4 +12,6 @@ func LoadCMD(root param_cmd.IParamCMD) {
 	loadFileSizeCMD(root)
 	loadRPCCMD(root)
 	loadParseRequestIdCMD(root)
+	loadBase64CMD(root)
+	loadZipCMD(root)
 }

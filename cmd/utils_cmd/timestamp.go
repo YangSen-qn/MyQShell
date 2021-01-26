@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"qshell/cmd/common"
 	"qshell/cmd/execute"
-	"qshell/cmd/output"
-	"qshell/cmd/output/message"
+	"qshell/cmd/output/output_utils"
 	"qshell/cmd/param_cmd"
 	"qshell/qn_error"
 	"qshell/qn_util"
@@ -18,7 +17,7 @@ type timestampCMD struct {
 func (cmd *timestampCMD) Execute(context *common.QShellContext) qn_error.IError {
 	timestamp := qn_util.Timestamp()
 	timestampString := fmt.Sprintf("%d", timestamp)
-	output.OutputResult(cmd, message.NewStringOutputData(timestampString))
+	output_utils.OutputResultWithString(cmd, timestampString)
 	return nil
 }
 

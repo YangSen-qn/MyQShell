@@ -4,8 +4,7 @@ import (
 	"net/url"
 	"qshell/cmd/common"
 	"qshell/cmd/execute"
-	"qshell/cmd/output"
-	"qshell/cmd/output/message"
+	"qshell/cmd/output/output_utils"
 	"qshell/cmd/param_cmd"
 	"qshell/qn_error"
 )
@@ -25,7 +24,7 @@ func (cmd *urlCMD) Prepare(context *common.QShellContext) qn_error.IError {
 
 func (cmd *urlCMD) Check(context *common.QShellContext) qn_error.IError {
 	if cmd.url == "" {
-		return qn_error.NewInvalidUserParamError("url can not empty")
+		return qn_error.NewInvalidUserParamError("value can not empty")
 	} else {
 		return nil
 	}
@@ -42,7 +41,7 @@ func (cmd *urlCMD) Execute(context *common.QShellContext) qn_error.IError {
 		}
 		urlString = urlUnescape
 	}
-	output.OutputResult(cmd, message.NewStringOutputData(urlString))
+	output_utils.OutputResultWithString(cmd, urlString)
 	return nil
 }
 
@@ -58,13 +57,13 @@ func loadUrlCMD(root param_cmd.IParamCMD) param_cmd.IParamCMD {
 	})
 
 	cmd.ConfigParamCMDParseConfig(param_cmd.ParamCMDConfig{
-		Use:   "url",
-		Short: "url encode and decode",
+		Use:   "value",
+		Short: "value encode and decode",
 		Long:  "",
 	})
 
-	cmd.FlagsBoolVar(&cmd.isEncode, "encode", "", false, "url encode")
-	cmd.FlagsBoolVar(&cmd.isDecode, "decode", "", false, "url decode")
+	cmd.FlagsBoolVar(&cmd.isEncode, "encode", "", false, "value encode")
+	cmd.FlagsBoolVar(&cmd.isDecode, "decode", "", false, "value decode")
 
 	root.AddCMD(cmd)
 	return cmd

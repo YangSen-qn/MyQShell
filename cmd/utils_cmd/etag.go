@@ -3,8 +3,7 @@ package utils_cmd
 import (
 	"qshell/cmd/common"
 	"qshell/cmd/execute"
-	"qshell/cmd/output"
-	"qshell/cmd/output/message"
+	"qshell/cmd/output/output_utils"
 	"qshell/cmd/param_cmd"
 	"qshell/qn_error"
 	"qshell/qn_util"
@@ -34,7 +33,7 @@ func (cmd *etagCMD) Execute(context *common.QShellContext) qn_error.IError {
 	if err != nil {
 		return qn_error.NewIOError(err.Error())
 	}
-	output.OutputResult(cmd, message.NewStringOutputData(etag))
+	output_utils.OutputResultWithString(cmd, etag)
 	return nil
 }
 

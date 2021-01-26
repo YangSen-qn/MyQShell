@@ -3,8 +3,7 @@ package utils_cmd
 import (
 	"qshell/cmd/common"
 	"qshell/cmd/execute"
-	"qshell/cmd/output"
-	"qshell/cmd/output/message"
+	"qshell/cmd/output/output_utils"
 	"qshell/cmd/param_cmd"
 	"qshell/qn_error"
 	"qshell/qn_util"
@@ -35,7 +34,7 @@ func (cmd *parseRequestIdCMD) Execute(context *common.QShellContext) qn_error.IE
 	if err != nil {
 		return err
 	}
-	output.OutputResult(cmd, message.NewStringOutputData(result))
+	output_utils.OutputResultWithString(cmd, result)
 	return nil
 }
 
