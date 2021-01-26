@@ -4,7 +4,6 @@ import (
 	"os"
 	"qshell/cmd/common"
 	"qshell/cmd/execute"
-	"qshell/cmd/output/output_utils"
 	"qshell/cmd/param_cmd"
 	"qshell/qn_error"
 	"qshell/qn_util"
@@ -39,10 +38,7 @@ func (cmd *unzipCMD) Check(context *common.QShellContext) qn_error.IError {
 }
 
 func (cmd *unzipCMD) Execute(context *common.QShellContext) qn_error.IError {
-	filePath := cmd.sourceFile
-	qn_util.Unzip(cmd.sourceFile, cmd.destinationDir)
-	output_utils.OutputResultWithString(cmd, filePath)
-	return nil
+	return qn_util.Unzip(cmd.sourceFile, cmd.destinationDir)
 }
 
 func loadZipCMD(root param_cmd.IParamCMD) param_cmd.IParamCMD {
@@ -61,6 +57,8 @@ func loadZipCMD(root param_cmd.IParamCMD) param_cmd.IParamCMD {
 		Short: "unzip file",
 		Long:  "",
 	})
+
+	cmd.FlagsStringVar(&cmd.destinationDir, "out", "", "", "destination dir by unzip")
 
 	root.AddCMD(cmd)
 	return cmd
