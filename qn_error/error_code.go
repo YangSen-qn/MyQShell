@@ -8,15 +8,15 @@ const (
 
 func NewInvalidUserParamError(format string, a ...interface{}) error {
 	format = QShellErrorCodeInvalidUserParam + format
-	return NewError(format, a)
+	return NewError(format, a...)
 }
 
 func NewFilePathError(format string, a ...interface{}) error {
 	format = QShellErrorCodeFilePathError + format
-	return NewError(format, a)
+	return NewError(format, a...)
 }
 
 func NewExecuteError(format string, a ...interface{}) error {
 	format = QShellErrorCodeExecuteError + format
-	return NewError(format, a)
+	return NewError(format, a...)
 }

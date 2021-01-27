@@ -25,7 +25,7 @@ func (cmd *credentialCMD) Execute(context *common.QShellContext) error {
 	} else {
 		credential := credential.GetCredential(cmd.name)
 		if credential == nil {
-			return qn_error.NewExecuteError("credential not exist for name:" + cmd.name)
+			return qn_error.NewExecuteError("credential not exist for name: %s", cmd.name)
 		}
 		output.OutputResult(cmd, credential)
 	}

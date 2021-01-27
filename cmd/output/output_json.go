@@ -3,6 +3,7 @@ package output
 import (
 	"encoding/json"
 	"qshell/cmd/output/message"
+	"qshell/qn_error"
 )
 
 /// 业务相关
@@ -21,17 +22,13 @@ func (o *JsonOutput) Output(outputType OutputType, data message.IOutputMessage, 
 	format.IsColorful = false
 	switch outputType {
 	case OutputTypeProgress, OutputTypeResult, OutputTypeDebug:
-		msgByte, err := json.Marshal(data)
-		if err != nil {
-
-		} else {
+		msgByte, _ := json.Marshal(data)
+		if err == nil {
 			msg = string(msgByte)
 		}
 	case OutputTypeError, OutputTypeInit, OutputTypeComplete:
 		if err != nil {
-
-		} else {
-
+			msg = qn_error.ToJson(err)
 		}
 	}
 	printBeautiful(msg, format)

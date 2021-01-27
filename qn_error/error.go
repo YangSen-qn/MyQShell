@@ -6,14 +6,14 @@ import (
 )
 
 type qnError struct {
-	err         error  `json:"error_info"`
-	description string `json:"error"`
+	err         error
+	Description string `json:"error"`
 }
 
 func NewError(format string, a ...interface{}) error {
 	return &qnError{
 		err:         nil,
-		description: fmt.Sprintf(format, a),
+		Description: fmt.Sprintf(format, a...),
 	}
 }
 
@@ -24,29 +24,33 @@ func NewErrorWithError(err error) error {
 func NewErrorWithErrorFormat(err error, format string, a ...interface{}) error {
 	return &qnError{
 		err:         err,
-		description: fmt.Sprintf(format, a),
+		Description: fmt.Sprintf(format, a...),
 	}
 }
 
 func (err *qnError) String() string {
-	return "error: " + err.description
+	desc := err.Description
+	if err.err != nil {
+		desc = fmt.Sprintf("***%s[%s]", desc, err.err)
+	}
+	return desc
 }
 
-func (err *qnError) MarshalJSON() ([]byte, error) {
-	return json.Marshal(err)
+func (err *qnError) marshalObject() error {
+	return NewError(err.String())
 }
 
 func (err *qnError) Error() string {
-	return "error: " + err.description
+	return err.String()
 }
 
 func ToJson(err error) string {
 	qnErr, ok := err.(*qnError)
-	if ok == false {
+	if !ok {
 		qnErr, _ = NewErrorWithError(err).(*qnError)
 	}
 
-	data, err := json.Marshal(qnErr)
+	data, err := json.Marshal(qnErr.marshalObject())
 	if err == nil {
 		return string(data)
 	} else {

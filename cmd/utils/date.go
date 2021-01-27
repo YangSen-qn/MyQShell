@@ -1,13 +1,11 @@
 package utils
 
 import (
-	"fmt"
 	"qshell/cmd/common"
 	"qshell/cmd/execute"
 	"qshell/cmd/output/output_utils"
 	"qshell/cmd/param"
 	"qshell/util"
-	"strconv"
 )
 
 type dateCMD struct {
@@ -33,10 +31,8 @@ func (cmd *dateCMD) Execute(context *common.QShellContext) error {
 	var timestamp int64
 	if cmd.timestamp == -1 {
 		timestamp = util.Timestamp()
-		fmt.Println("=== A")
 	} else {
 		timestamp = cmd.timestamp
-		fmt.Println("=== B:", strconv.Itoa(int(cmd.timestamp)))
 	}
 
 	date := util.DateWithTimestamp(timestamp, -1*before)
