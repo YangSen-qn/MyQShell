@@ -2,66 +2,54 @@ package qn_error
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
-type Level int8
-
-const (
-	LevelLight Level = iota
-	LevelMiddle
-	LevelHeavy
-)
-
-type IError interface {
-	error
-	json.Marshaler
-
-	ErrorLevel() Level
-	ErrorCode() string
+type qnError struct {
+	err         error  `json:"error_info"`
+	description string `json:"error"`
 }
 
-type Error struct {
-	level       Level
-	code        string `json:"code"`
-	description string `json:"description"`
-}
-
-func NewError(level Level, code string, description string) *Error {
-	return &Error{
-		level:       level,
-		code:        code,
-		description: description,
+func NewError(format string, a ...interface{}) error {
+	return &qnError{
+		err:         nil,
+		description: fmt.Sprintf(format, a),
 	}
 }
 
-func NewLightError(code string, description string) *Error {
-	return NewError(LevelLight, code,description)
+func NewErrorWithError(err error) error {
+	return NewErrorWithErrorFormat(err, "")
 }
 
-func NewMiddleError(code string, description string) *Error {
-	return NewError(LevelMiddle, code,description)
+func NewErrorWithErrorFormat(err error, format string, a ...interface{}) error {
+	return &qnError{
+		err:         err,
+		description: fmt.Sprintf(format, a),
+	}
 }
 
-func NewHeavyError(code string, description string) *Error {
-	return NewError(LevelHeavy, code,description)
+func (err *qnError) String() string {
+	return "error: " + err.description
 }
 
-func (err *Error) String() string {
-	return err.code + ": " + err.description
-}
-
-func (err *Error) MarshalJSON() ([]byte, error) {
+func (err *qnError) MarshalJSON() ([]byte, error) {
 	return json.Marshal(err)
 }
 
-func (err *Error) Error() string {
-	return err.code + ": " + err.description
+func (err *qnError) Error() string {
+	return "error: " + err.description
 }
 
-func (err *Error) ErrorCode() string {
-	return err.code
-}
+func ToJson(err error) string {
+	qnErr, ok := err.(*qnError)
+	if ok == false {
+		qnErr, _ = NewErrorWithError(err).(*qnError)
+	}
 
-func (err *Error) ErrorLevel() Level {
-	return err.level
+	data, err := json.Marshal(qnErr)
+	if err == nil {
+		return string(data)
+	} else {
+		return ""
+	}
 }

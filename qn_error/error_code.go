@@ -1,35 +1,22 @@
 package qn_error
 
 const (
-	QShellErrorCodeWarning = "Warning"
-	QShellErrorCodeIOError = "IO error"
-	QShellErrorCodeCryptError = "crypt error"
-	QShellErrorCodeDBPathError = "db error"
-	QShellErrorCodeFilePathError = "filePath error"
-	QShellErrorCodeInvalidUserParam = "invalid user input param"
+	QShellErrorCodeExecuteError = "execute error: "
+	QShellErrorCodeFilePathError = "filePath error: "
+	QShellErrorCodeInvalidUserParam = "invalid user input param: "
 )
 
-
-func NewInvalidUserParamError(description string) *Error {
-	return NewHeavyError(QShellErrorCodeInvalidUserParam, description)
+func NewInvalidUserParamError(format string, a ...interface{}) error {
+	format = QShellErrorCodeInvalidUserParam + format
+	return NewError(format, a)
 }
 
-func NewDBError(description string) *Error {
-	return NewHeavyError(QShellErrorCodeDBPathError, description)
+func NewFilePathError(format string, a ...interface{}) error {
+	format = QShellErrorCodeFilePathError + format
+	return NewError(format, a)
 }
 
-func NewFilePathError(description string) *Error {
-	return NewHeavyError(QShellErrorCodeFilePathError, description)
-}
-
-func NewCryptError(description string) *Error {
-	return NewHeavyError(QShellErrorCodeCryptError, description)
-}
-
-func NewIOError(description string) *Error {
-	return NewHeavyError(QShellErrorCodeIOError, description)
-}
-
-func NewWarningError(description string) *Error {
-	return NewHeavyError(QShellErrorCodeWarning, description)
+func NewExecuteError(format string, a ...interface{}) error {
+	format = QShellErrorCodeExecuteError + format
+	return NewError(format, a)
 }

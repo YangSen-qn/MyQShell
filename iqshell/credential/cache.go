@@ -2,8 +2,7 @@ package credential
 
 import (
 	"qshell/iqshell/cache"
-	"qshell/qn_error"
-	"qshell/qn_util"
+	"qshell/util"
 )
 
 var (
@@ -15,9 +14,9 @@ var (
 	currentCredentialCache = cache.NewCache()
 )
 
-func SetCachePath(path string) qn_error.IError {
-	if !qn_util.Exist(path) || qn_util.IsFileEmpty(path) {
-		qn_util.CreateFile(path, "{}")
+func SetCachePath(path string) error {
+	if !util.Exist(path) || util.IsFileEmpty(path) {
+		util.CreateFile(path, "{}")
 	}
 	return currentCredentialCache.SetCacheFile(path)
 }

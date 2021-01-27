@@ -3,7 +3,6 @@ package output
 import (
 	"encoding/json"
 	"qshell/cmd/output/message"
-	error2 "qshell/qn_error"
 )
 
 /// 业务相关
@@ -11,7 +10,7 @@ type JsonOutput struct {
 	pretty bool
 }
 
-func (o *JsonOutput) Output(outputType OutputType, data message.IOutputMessage, err error2.IError) {
+func (o *JsonOutput) Output(outputType OutputType, data message.IOutputMessage, err error) {
 	if outputType == OutputTypeInit ||
 		outputType == OutputTypeComplete {
 		return

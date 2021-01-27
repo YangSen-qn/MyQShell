@@ -4,10 +4,9 @@ import (
 	"qshell/cmd/common"
 	"qshell/cmd/output"
 	"qshell/cmd/output/message"
-	"qshell/qn_error"
 )
 
-type CommandFunction func(context *common.QShellContext) qn_error.IError
+type CommandFunction func(context *common.QShellContext) error
 
 type CommandConfig struct {
 	Output          output.IOutput
@@ -47,7 +46,7 @@ func (c *Command) GetOutput() output.IOutput {
 	return c.output
 }
 
-func (c *Command) Check(context *common.QShellContext) qn_error.IError {
+func (c *Command) Check(context *common.QShellContext) error {
 	if c.checkFunction == nil {
 		return nil
 	} else {
@@ -55,7 +54,7 @@ func (c *Command) Check(context *common.QShellContext) qn_error.IError {
 	}
 }
 
-func (c *Command) Prepare(context *common.QShellContext) qn_error.IError {
+func (c *Command) Prepare(context *common.QShellContext) error {
 	if c.prepareFunction == nil {
 		return nil
 	} else {
@@ -63,7 +62,7 @@ func (c *Command) Prepare(context *common.QShellContext) qn_error.IError {
 	}
 }
 
-func (c *Command) Execute(context *common.QShellContext) qn_error.IError {
+func (c *Command) Execute(context *common.QShellContext) error {
 	if c.executeFunction == nil {
 		return nil
 	} else {
@@ -71,7 +70,7 @@ func (c *Command) Execute(context *common.QShellContext) qn_error.IError {
 	}
 }
 
-func (c *Command) Output(outputType output.OutputType, data message.IOutputMessage, err qn_error.IError) {
+func (c *Command) Output(outputType output.OutputType, data message.IOutputMessage, err error) {
 	if c.output != nil {
 		c.output.Output(outputType, data, err)
 	}

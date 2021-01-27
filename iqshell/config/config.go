@@ -39,7 +39,7 @@ func SetLoadConfig(loadConfig *LoadConfig)  {
 	config = loadConfig
 }
 
-func GetCredentialDBPath() (path string, err qn_error.IError) {
+func GetCredentialDBPath() (path string, err error) {
 	path, err = RootPath()
 	if err != nil {
 		return
@@ -50,7 +50,7 @@ func GetCredentialDBPath() (path string, err qn_error.IError) {
 }
 
 // config path
-func GetConfigPath() (path string, err qn_error.IError)  {
+func GetConfigPath() (path string, err error)  {
 	path, err = RootPath()
 	if err != nil {
 		return
@@ -61,7 +61,7 @@ func GetConfigPath() (path string, err qn_error.IError)  {
 }
 
 // 获取ROOTPath
-func RootPath() (path string, err qn_error.IError) {
+func RootPath() (path string, err error) {
 	if config.RootDir == "" {
 		config.RootDir = defaultRootPath()
 	}

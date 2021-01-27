@@ -3,7 +3,6 @@ package output
 import (
 	"fmt"
 	"qshell/cmd/output/message"
-	error2 "qshell/qn_error"
 	"strings"
 )
 
@@ -103,7 +102,7 @@ type DefaultOutput struct {
 	IsColorful bool
 }
 
-func (output *DefaultOutput) Output(outputType OutputType, data message.IOutputMessage, err error2.IError) {
+func (output *DefaultOutput) Output(outputType OutputType, data message.IOutputMessage, err error) {
 	if outputType == OutputTypeInit ||
 		outputType == OutputTypeComplete {
 		return

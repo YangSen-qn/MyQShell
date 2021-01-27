@@ -22,11 +22,11 @@ func (credential *Credential) isValid() bool {
 	return credential.Name != "" && credential.AccessKey != "" && credential.SecretKey != ""
 }
 
-func (credential *Credential) checkValid() qn_error.IError {
+func (credential *Credential) checkValid() error {
 	if credential.isValid() {
 		return nil
 	} else {
-		return qn_error.NewInvalidUserParamError("credential is invalid for name:" + credential.Name)
+		return qn_error.NewInvalidUserParamError("credential is invalid for name:", credential.Name)
 	}
 }
 
@@ -61,14 +61,14 @@ func CurrentCredential() *Credential {
 	}
 }
 
-func SetCurrentCredential(name string) qn_error.IError {
+func SetCurrentCredential(name string) error {
 	credential := GetCredential(name)
 	if credential == nil {
-		return qn_error.NewInvalidUserParamError("not exist credential for name:" + name)
+		return qn_error.NewInvalidUserParamError("not exist credential for name:", name)
 	}
 
 	if !credential.isValid() {
-		return qn_error.NewInvalidUserParamError("credential is invalid for name:" + name)
+		return qn_error.NewInvalidUserParamError("credential is invalid for name:", name)
 	}
 
 	currentCredential = credential
@@ -80,7 +80,7 @@ func GetCredential(name string) *Credential {
 	return getCredentialFromDB(name)
 }
 
-func RemoveCredential(name string) qn_error.IError {
+func RemoveCredential(name string) error {
 	err := removeCredentialFromDB(name)
 	if err != nil {
 		return err
@@ -94,7 +94,7 @@ func RemoveCredential(name string) qn_error.IError {
 	return err
 }
 
-func AddCredential(credential *Credential) qn_error.IError {
+func AddCredential(credential *Credential) error {
 	if !credential.isValid() {
 		return qn_error.NewInvalidUserParamError("credential info is invalid")
 	}

@@ -2,7 +2,7 @@ package credential
 
 import (
 	"encoding/base64"
-	"qshell/qn_util"
+	"qshell/util"
 	"strings"
 )
 
@@ -13,8 +13,8 @@ func Encrypt(accessKey, encryptedKey, name string) string {
 
 // 对SecretKey加密, 返回加密后的字符串
 func encryptSecretKey(accessKey, secretKey string) (string, error) {
-	aesKey := qn_util.Md5Hex(accessKey)
-	encryptedSecretKeyBytes, encryptedErr := qn_util.AesEncrypt([]byte(secretKey), []byte(aesKey[7:23]))
+	aesKey := util.Md5Hex(accessKey)
+	encryptedSecretKeyBytes, encryptedErr := util.AesEncrypt([]byte(secretKey), []byte(aesKey[7:23]))
 	if encryptedErr != nil {
 		return "", encryptedErr
 	}
@@ -24,12 +24,12 @@ func encryptSecretKey(accessKey, secretKey string) (string, error) {
 
 // 对加密的SecretKey进行解密， 返回SecretKey
 func decryptSecretKey(accessKey, encryptedKey string) (string, error) {
-	aesKey := qn_util.Md5Hex(accessKey)
+	aesKey := util.Md5Hex(accessKey)
 	encryptedSecretKeyBytes, decodeErr := base64.URLEncoding.DecodeString(encryptedKey)
 	if decodeErr != nil {
 		return "", decodeErr
 	}
-	secretKeyBytes, decryptErr := qn_util.AesDecrypt([]byte(encryptedSecretKeyBytes), []byte(aesKey[7:23]))
+	secretKeyBytes, decryptErr := util.AesDecrypt([]byte(encryptedSecretKeyBytes), []byte(aesKey[7:23]))
 	if decryptErr != nil {
 		return "", decryptErr
 	}

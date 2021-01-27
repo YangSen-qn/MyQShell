@@ -3,10 +3,9 @@ package load
 import (
 	"qshell/iqshell/config"
 	"qshell/iqshell/credential"
-	"qshell/qn_error"
 )
 
-func LoadInterQShell(loadConfig *config.LoadConfig) qn_error.IError {
+func LoadInterQShell(loadConfig *config.LoadConfig) error {
 
 	// 加在配置
 	config.SetLoadConfig(loadConfig)

@@ -22,7 +22,7 @@ func (cache *Cache) GetCachePath() string {
 	return cache.configJsonFile
 }
 
-func (cache *Cache) SetCacheFile(file string) (err qn_error.IError) {
+func (cache *Cache) SetCacheFile(file string) (err error) {
 	if file == "" {
 		err = qn_error.NewFilePathError("cache file is empty")
 		return
@@ -34,7 +34,7 @@ func (cache *Cache) SetCacheFile(file string) (err qn_error.IError) {
 	return cache.ReadInConfig()
 }
 
-func (cache *Cache) SetCachePath(path string, name string) qn_error.IError {
+func (cache *Cache) SetCachePath(path string, name string) error {
 	if path == "" {
 		return qn_error.NewFilePathError("cache path is empty")
 	} else {
@@ -46,13 +46,8 @@ func (cache *Cache) SetCachePath(path string, name string) qn_error.IError {
 	return cache.ReadInConfig()
 }
 
-func (cache *Cache) ReadInConfig() qn_error.IError {
-	err := cache.cache.ReadInConfig()
-	if err == nil {
-		return nil
-	} else {
-		return qn_error.NewFilePathError(err.Error())
-	}
+func (cache *Cache) ReadInConfig() error {
+	return cache.cache.ReadInConfig()
 }
 
 // api
